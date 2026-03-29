@@ -15,7 +15,7 @@ Le projet repose sur une pipeline d'ingestion de données automatisée :
 4.  **Observabilité :** Stack ELK (Logstash -> Elasticsearch -> Kibana) pour l'indexation et la visualisation en temps réel.
 
 ## 📁 Structure du Repository
-- `data/` : Le benchmark de 150 prompts classés par catégories de risques.
+- `data/` : Le benchmark de +150 prompts classés par catégories de risques.
 - `scripts/` : Le script d'orchestration Python.
 - `docker/` : Configuration `docker-compose.yml` pour la stack ELK.
 - `results/` : Exportations CSV des tests bruts et scores.
