@@ -25,7 +25,7 @@ Le projet repose sur une pipeline d'ingestion de données automatisée :
 ### 1. Prérequis
 - Docker & Docker Compose
 - Python 3.9+
-- Ollama (avec les modèles gemma2, llama3.2 et mistral installés)
+- Ollama (avec les modèles gemma2, llama3.2 et phi3 installés)
 
 ### 2. Lancement de la Stack d'Observabilité
 ```bash
