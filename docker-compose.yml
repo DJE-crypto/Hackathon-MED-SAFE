@@ -1,0 +1,54 @@
+version: "3.8"
+services:
+  # 1. Le cerveau de l'IA
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama  
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # 2. La base de données (Stockage)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+        reservations:
+          memory: 2g
+
+  # 3. Le trieur (Configuré avec le codec JSON pour ton script Python)
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.10.2
+    command: bin/logstash -e 'input { http { port => 5044 codec => json } } output { elasticsearch { hosts => ["http://elasticsearch:9200"] index => "hackathon-ia" } }'
+    ports:
+      - "5044:5044"
+    depends_on:
+      - elasticsearch
+
+  # 4. L'interface (Graphiques)
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+volumes:                        
+  ollama_data:
